@@ -22,12 +22,12 @@ export default function Header() {
             </nav>
 
             <div className="flex gap-4 items-center">
-                <Link href="/login">
+                <Link href="/sign-in">
                     <Button variant="ghost" className="text-sm">
                         Entrar
                     </Button>
                 </Link>
-                <Link href="/register">
+                <Link href="/sign-up">
                     <Button className="text-sm">
                         Começar grátis
                     </Button>
