@@ -29,9 +29,18 @@ export const authOptions: NextAuthOptions = {
             },
             async authorize(credentials) {
                 try {
-                    const user = await login(credentials!.email, credentials!.password);
-                    return user;
-                } catch {
+                    const response = await login(credentials!.email, credentials!.password);
+
+                    if (response && response.access_token) {
+                        return {
+                            ...response.user,
+                            accessToken: response.access_token,
+                        };
+                    }
+
+                    throw new Error("Token de acesso não encontrado.");
+                } catch (err) {
+                    console.error("Erro ao autenticar com email/senha:", err);
                     return null;
                 }
             },
@@ -45,6 +54,7 @@ export const authOptions: NextAuthOptions = {
                 const payload = {
                     name: profile.name,
                     email: profile.email,
+                    sub: user.id,
                     provider: account.provider,
                 };
 
@@ -55,11 +65,11 @@ export const authOptions: NextAuthOptions = {
 
                     const response = await loginSocial(customJwt);
 
-                    if (response && response.access_token) {
+                    if (response?.access_token) {
                         token.accessToken = response.access_token;
                     }
                 } catch (error) {
-                    console.error("Erro ao autenticar com kanbrain-api:", error);
+                    console.error("Erro ao autenticar com API social:", error);
                 }
             }
 
@@ -69,14 +79,13 @@ export const authOptions: NextAuthOptions = {
 
             return token;
         },
-
         async session({ session, token }) {
             session.accessToken = token.accessToken as string;
             return session;
         },
     },
     secret: process.env.NEXTAUTH_SECRET,
-}
+};
 
 const handler = NextAuth(authOptions);
 
