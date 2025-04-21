@@ -1,10 +1,17 @@
-import NextAuth from "next-auth";
+import NextAuth, { NextAuthOptions } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import Github from "next-auth/providers/github";
 import Google from "next-auth/providers/google";
-import { login } from "@/lib/api/auth";
+import { login, loginSocial } from "@/lib/api/auth";
+import jwt from 'jsonwebtoken';
 
-export const authOptions = {
+export const authOptions: NextAuthOptions = {
+    session: {
+        strategy: "jwt",
+    },
+    jwt: {
+        secret: process.env.NEXTAUTH_SECRET,
+    },
     providers: [
         Google({
             clientId: process.env.GOOGLE_CLIENT_ID!,
@@ -22,14 +29,61 @@ export const authOptions = {
             },
             async authorize(credentials) {
                 try {
-                    const user = await login(credentials!.email, credentials!.password);
-                    return user;
-                } catch {
+                    const response = await login(credentials!.email, credentials!.password);
+
+                    if (response && response.access_token) {
+                        return {
+                            ...response.user,
+                            accessToken: response.access_token,
+                        };
+                    }
+
+                    throw new Error("Token de acesso não encontrado.");
+                } catch (err) {
+                    console.error("Erro ao autenticar com email/senha:", err);
                     return null;
                 }
             },
         }),
     ],
+    callbacks: {
+        async jwt({ token, account, profile, user }) {
+            const isOAuthLogin = account && (account.provider === 'google' || account.provider === 'github');
+
+            if (isOAuthLogin && profile?.email) {
+                const payload = {
+                    name: profile.name,
+                    email: profile.email,
+                    sub: user.id,
+                    provider: account.provider,
+                };
+
+                try {
+                    const customJwt = jwt.sign(payload, process.env.NEXTAUTH_SECRET!, {
+                        issuer: 'next-auth',
+                    });
+
+                    const response = await loginSocial(customJwt);
+
+                    if (response?.access_token) {
+                        token.accessToken = response.access_token;
+                    }
+                } catch (error) {
+                    console.error("Erro ao autenticar com API social:", error);
+                }
+            }
+
+            if (user && user.accessToken) {
+                token.accessToken = user.accessToken;
+            }
+
+            return token;
+        },
+        async session({ session, token }) {
+            session.accessToken = token.accessToken as string;
+            return session;
+        },
+    },
     secret: process.env.NEXTAUTH_SECRET,
 };
 
