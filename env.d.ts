@@ -6,6 +6,6 @@ declare namespace NodeJS {
         GITHUB_CLIENT_ID: string;
         GITHUB_CLIENT_SECRET: string;
         NEXTAUTH_SECRET: string;
-        NEXTAUTH_API_PUBLIC: string;
+        NEXT_PUBLIC_API_URL: string;
     }
 }
