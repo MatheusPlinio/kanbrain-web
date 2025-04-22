@@ -11,9 +11,7 @@ export default function ModalCreateBoard() {
     const [open, setOpen] = useState(true);
 
     const handleCreateBoard = async (data: CreateBoardRequest) => {
-        const teste = await createBoard(data);
-
-        console.log("teste", teste);
+        await createBoard(data);
 
         setOpen(false);
     };

@@ -59,14 +59,14 @@ export const authOptions: NextAuthOptions = {
                 };
 
                 try {
-                    const customJwt = jwt.sign(payload, process.env.NEXTAUTH_SECRET!, {
+                    const customJwt = jwt.sign(payload, process.env.NEXTAUTH_SECRET, {
                         issuer: 'next-auth',
                     });
 
                     const response = await loginSocial(customJwt);
-
-                    if (response?.access_token) {
-                        token.accessToken = response.access_token;
+                    
+                    if (response?.accessToken) {
+                        token.accessToken = response.accessToken;
                     }
                 } catch (error) {
                     console.error("Erro ao autenticar com API social:", error);

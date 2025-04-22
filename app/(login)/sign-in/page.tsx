@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 import SignInForm from "./signInForm";
 
 export default async function SignInPage() {
+
     const session = await getServerSession(authOptions);
 
     if (session) {

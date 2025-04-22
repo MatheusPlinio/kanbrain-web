@@ -10,6 +10,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Switch } from '@/components/ui/switch';
+import { useCustomToast } from '@/lib/hooks/useToastCustom';
 
 
 const boardBaseSchema = z.object({
@@ -39,7 +40,14 @@ export default function CreateBoardForm({ onSubmit }: CreateBoardFormProps) {
         resolver: zodResolver(boardSchema)
     });
 
+    const { showToast } = useCustomToast();
+
     const onSubmitHandler = (data: BoardFormData) => {
+        showToast({
+            title: "Quadro criado com sucesso!",
+            description: "O seu quadro foi criado com sucesso.",
+            variant: "success",
+        });
         onSubmit(data);
     };
 

@@ -9,10 +9,9 @@ api.interceptors.request.use(
     async (config) => {
         const session = await getSession()
 
-        console.log('session', session)
-
         if (session?.accessToken) {
             config.headers.Authorization = `Bearer ${session.accessToken}`
+            config.headers.Accept = 'application/json'
         }
 
         return config
