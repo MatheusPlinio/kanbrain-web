@@ -1,5 +1,5 @@
 export async function login(email: string, password: string) {
-    const res = await fetch(`${process.env.NEXTAUTH_API_PUBLIC}/api/login`, {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/login`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
@@ -17,8 +17,7 @@ export async function login(email: string, password: string) {
 }
 
 export async function loginSocial(tokenJwt: string) {
-    console.log(process.env.NEXTAUTH_API_PUBLIC);
-    const res = await fetch(`${process.env.NEXTAUTH_API_PUBLIC}/api/login-social`, {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/login-social`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
@@ -41,7 +40,7 @@ export async function register(data: {
     email: string;
     password: string;
 }) {
-    const res = await fetch(`${process.env.NEXTAUTH_API_PUBLIC}/api/register`, {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/register`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
