@@ -11,3 +11,8 @@ export const createBoard = async (data: CreateBoardRequest) => {
     const response = await postRequest<CreateBoardRequest, ApiResponse<CreateBoardResponse>>('/api/boards/store', data)
     return response
 };
+
+export const getBoardBySlug = async (slug: string) => {
+    const response = await api.get(`/api/boards/show/${slug}`);
+    return response.data
+}

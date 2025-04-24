@@ -5,7 +5,7 @@ import { Card, CardContent, CardTitle } from "@/components/ui/card";
 import Link from "next/link";
 import { fetchBoards } from '@/lib/api/boards';
 import { Board } from '@/types/board';
-import ModalCreateBoard from '@/app/@modal/dashboard/create/page';
+import ModalCreateBoard from '@/app/(kanbrain)/@modal/dashboard/create/page';
 import { useState } from 'react';
 
 export default function DashboardPage() {
@@ -29,8 +29,8 @@ export default function DashboardPage() {
                 <p>Loading...</p>
             ) : (
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-                    {boards.map((board) => (
-                        <Link href={`/boards/${board.id}`} key={board.id}>
+                    {boards.map((board: Board) => (
+                        <Link href={`/board/${board.slug}`} key={board.id}>
                             <Card className="cursor-pointer hover:shadow-lg transition-shadow">
                                 <CardContent className="p-4">
                                     <CardTitle>{board.title}</CardTitle>
@@ -40,7 +40,7 @@ export default function DashboardPage() {
                         </Link>
                     ))}
 
-                    <Link href="/boards/create">
+                    <Link href="/board/create">
                         <Card className="flex items-center justify-center h-full cursor-pointer hover:shadow-lg transition-shadow border-dashed">
                             <CardContent className="p-4 text-center text-muted-foreground">
                                 + Create New Board

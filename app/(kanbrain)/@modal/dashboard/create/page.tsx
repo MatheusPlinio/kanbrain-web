@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 
-import CreateBoardPage from "@/app/(dashboard)/dashboard/create/page";
+import CreateBoardPage from "@/app/(kanbrain)/(dashboard)/dashboard/create/page";
 import ModalLayout from "../../layout";
 import { createBoard } from "@/lib/api/boards";
 import { CreateBoardRequest } from "@/types/board";

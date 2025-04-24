@@ -12,7 +12,6 @@ import { Textarea } from "@/components/ui/textarea";
 import { Switch } from '@/components/ui/switch';
 import { useCustomToast } from '@/lib/hooks/useToastCustom';
 
-
 const boardBaseSchema = z.object({
     title: z.string().min(1, { message: "É preciso de um título" }).max(100),
     description: z.string().min(1, { message: "É preciso de uma descrição" }).max(300),
