@@ -6,4 +6,5 @@ export const useBoard = (slug: string) =>
         queryKey: ["board", slug],
         queryFn: () => getBoardBySlug(slug),
         enabled: !!slug,
+        retry: false
     });

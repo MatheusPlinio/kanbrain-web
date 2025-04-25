@@ -1,19 +1,25 @@
 'use client';
 
-import { useState } from "react";
-
 import CreateBoardPage from "@/app/(kanbrain)/(dashboard)/dashboard/create/page";
 import ModalLayout from "../../layout";
 import { createBoard } from "@/lib/api/boards";
 import { CreateBoardRequest } from "@/types/board";
 
-export default function ModalCreateBoard() {
-    const [open, setOpen] = useState(true);
+interface ModalCreateBoardProps {
+    open: boolean;
+    setOpen: (open: boolean) => void;
+    onCreated?: () => void;
+}
 
+export default function ModalCreateBoard({
+    open,
+    setOpen,
+    onCreated
+}: ModalCreateBoardProps) {
     const handleCreateBoard = async (data: CreateBoardRequest) => {
         await createBoard(data);
-
         setOpen(false);
+        onCreated?.();
     };
 
     return (

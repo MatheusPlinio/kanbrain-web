@@ -6,4 +6,5 @@ export const useColumnTasks = (columnId: number) =>
     queryKey: ["tasks", columnId],
     queryFn: () => getTasksByColumn(columnId),
     enabled: !!columnId,
+    retry: false
   });

@@ -1,19 +1,14 @@
 'use client';
-import { useQuery } from '@tanstack/react-query';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardTitle } from "@/components/ui/card";
 import Link from "next/link";
-import { fetchBoards } from '@/lib/api/boards';
 import { Board } from '@/types/board';
 import ModalCreateBoard from '@/app/(kanbrain)/@modal/dashboard/create/page';
 import { useState } from 'react';
+import { useDashboard } from '@/hooks/useDashboard';
 
 export default function DashboardPage() {
-    const { data: boards = [], isLoading } = useQuery<Board[]>({
-        queryKey: ['boards'],
-        queryFn: fetchBoards,
-        retry: false,
-    });
+    const { data: boards = [], isLoading, refetch } = useDashboard();
 
     const [open, setOpen] = useState(false);
 
@@ -21,8 +16,12 @@ export default function DashboardPage() {
         <div className="p-4">
             <div className="flex justify-between items-center mb-4">
                 <h2 className="text-2xl font-semibold">Your Boards</h2>
-                <Button onClick={() => setOpen(true)} className='cursor-pointer'>+ New Board</Button>
-                {open && <ModalCreateBoard />}
+                <Button onClick={() => setOpen(true)} className="cursor-pointer">+ New Kanban</Button>
+                <ModalCreateBoard
+                    open={open}
+                    setOpen={setOpen}
+                    onCreated={refetch}
+                />
             </div>
 
             {isLoading ? (

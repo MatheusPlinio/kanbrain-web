@@ -1,29 +1,33 @@
 'use client'
+import ModalCreateColumn from "@/app/(kanbrain)/@modal/board/[slug]/add-column/page";
 import Column from "@/components/kanban/ColumnStatus";
-import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 import { useBoard } from "@/hooks/useBoard";
 import { IColumn } from "@/types/column";
-import Link from "next/link";
 import { useParams } from "next/navigation";
+import { useState } from "react";
 
 export default function BoardPage() {
     const params = useParams();
-    const boardId = params.slug;
+    const boardSlug = String(params.slug);
 
-    const { data: board, isLoading } = useBoard(boardId as string);
+    const { data: board, isLoading, refetch } = useBoard(boardSlug);
+
+    const [open, setOpen] = useState(false);
 
     if (isLoading) return <p>Carregando quadro...</p>;
 
     return (
         <div className="p-4 space-y-4">
-            <div className="flex justify-end">
-                <Link href={`/${boardId}/add-column`}>
-                    <Card className="flex items-center justify-center h-full cursor-pointer hover:shadow-lg transition-shadow border-dashed">
-                        <CardContent className="p-4 text-center text-muted-foreground">
-                            + Create New Board
-                        </CardContent>
-                    </Card>
-                </Link>
+            <div className="flex justify-between items-center mb-4">
+                <h2 className="text-2xl font-semibold">Your Boards</h2>
+                <Button onClick={() => setOpen(true)}>+ New Status</Button>
+                <ModalCreateColumn
+                    open={open}
+                    setOpen={setOpen}
+                    boardSlug={boardSlug}
+                    onCreated={refetch}
+                />
             </div>
 
             <div className="flex gap-4 overflow-x-auto">

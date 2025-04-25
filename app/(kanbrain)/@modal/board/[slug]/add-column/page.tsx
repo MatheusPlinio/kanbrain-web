@@ -1,20 +1,27 @@
 'use client';
 
-import { useState } from "react";
 import ModalLayout from "../../../layout";
 import { ICreateColumnRequest } from "@/types/column";
 import CreateColumnForm from "@/app/(kanbrain)/(board)/board/[slug]/add-column/page";
-import { useParams } from "next/navigation";
 import { createColumn } from "@/lib/api/column";
 
-export default function ModalCreateColumn() {
-    const [open, setOpen] = useState(true);
-    const params = useParams();
-    const boardSlug = String(params.slug);
+interface ModalCreateColumnProps {
+    open: boolean;
+    setOpen: (open: boolean) => void;
+    boardSlug: string;
+    onCreated?: () => void;
+}
+
+export default function ModalCreateColumn({
+    open,
+    setOpen,
+    boardSlug,
+    onCreated
+}: ModalCreateColumnProps) {
 
     const handleCreateColumn = async (data: ICreateColumnRequest) => {
         await createColumn(data, boardSlug);
-
+        onCreated?.();
         setOpen(false);
     };
 
